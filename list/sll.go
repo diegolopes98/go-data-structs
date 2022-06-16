@@ -11,6 +11,7 @@ type SLL[T interface{}] interface {
 	Get(index uint) *Node[T]
 	Set(index uint, value T)
 	Insert(index uint, value T) SLL[T]
+	Remove(index uint)
 }
 
 type Node[T interface{}] struct {
@@ -132,4 +133,20 @@ func (l *list[T]) Insert(index uint, value T) SLL[T] {
 		}
 	}
 	return l
+}
+
+func (l *list[T]) Remove(index uint) {
+	if index == 0 {
+		l.Shift()
+	} else if index == l.Length() - 1 {
+		l.Pop()
+	} else {
+		prev := l.Get(index - 1)
+		if (prev != nil) {
+			curr := prev.Next
+			next := curr.Next
+			prev.Next = next
+			l.len--
+		}
+	}
 }
