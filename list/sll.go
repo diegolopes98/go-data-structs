@@ -15,10 +15,10 @@ type SLL[T interface{}] interface {
 
 type Node[T interface{}] struct {
 	Value T
-	Next *Node[T]
+	Next  *Node[T]
 }
 
-func NewNode[T interface{}](value T) *Node[T]{
+func NewNode[T interface{}](value T) *Node[T] {
 	return &Node[T]{value, nil}
 }
 
@@ -122,13 +122,14 @@ func (l *list[T]) Set(index uint, value T) {
 func (l *list[T]) Insert(index uint, value T) SLL[T] {
 	if index == 0 {
 		l.Unshift(value)
-	} else if index == l.Length() - 1 {
-		l.Push(value)
 	} else {
 		prevNode := l.Get(index - 1)
-		node := NewNode(value)
-		node.Next = prevNode.Next
-		prevNode.Next = node
+		if prevNode != nil {
+			node := NewNode(value)
+			node.Next = prevNode.Next
+			prevNode.Next = node
+			l.len++
+		}
 	}
 	return l
 }
