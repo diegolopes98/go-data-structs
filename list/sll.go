@@ -6,6 +6,7 @@ type SLL[T interface{}] interface {
 	Length() uint
 	Push(value T) *List[T]
 	Pop() *Node[T]
+	Shift() *Node[T]
 }
 
 type Node[T interface{}] struct {
@@ -69,4 +70,17 @@ func (l *List[T]) Pop() *Node[T] {
 		l.tail = nil
 	}
 	return curr
+}
+
+func (l *List[T]) Shift() *Node[T] {
+	if l.len == 0 {
+		return nil
+	}
+	node := l.Head()
+	l.head = node.Next
+	l.len--
+	if l.len == 0 {
+		l.tail = nil
+	}
+	return node
 }
