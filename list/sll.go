@@ -8,6 +8,7 @@ type SLL[T interface{}] interface {
 	Pop() *Node[T]
 	Shift() *Node[T]
 	Unshift(value T) SLL[T]
+	Get(index uint) *Node[T]
 }
 
 type Node[T interface{}] struct {
@@ -92,4 +93,15 @@ func (l *list[T]) Unshift(value T) SLL[T] {
 	l.head = node
 	l.len++
 	return l
+}
+
+func (l *list[T]) Get(index uint) *Node[T] {
+	if index > l.len-1 {
+		return nil
+	}
+	curr := l.Head()
+	for i := uint(0); i < index; i++ {
+		curr = curr.Next
+	}
+	return curr
 }
