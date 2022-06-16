@@ -12,7 +12,7 @@ type SLL[T interface{}] interface {
 }
 
 type Node[T interface{}] struct {
-	Data T
+	Value T
 	Next *Node[T]
 }
 
