@@ -4,9 +4,10 @@ type SLL[T interface{}] interface {
 	Head() *Node[T]
 	Tail() *Node[T]
 	Length() uint
-	Push(value T) *List[T]
+	Push(value T) SLL[T]
 	Pop() *Node[T]
 	Shift() *Node[T]
+	Unshift(value T) SLL[T]
 }
 
 type Node[T interface{}] struct {
@@ -14,29 +15,29 @@ type Node[T interface{}] struct {
 	Next *Node[T]
 }
 
-type List[T interface{}] struct {
+type list[T interface{}] struct {
 	head *Node[T]
 	tail *Node[T]
 	len  uint
 }
 
 func NewSLL[T interface{}]() SLL[T] {
-	return &List[T]{nil, nil, 0}
+	return &list[T]{nil, nil, 0}
 }
 
-func (l *List[T]) Head() *Node[T] {
+func (l *list[T]) Head() *Node[T] {
 	return l.head
 }
 
-func (l *List[T]) Tail() *Node[T] {
+func (l *list[T]) Tail() *Node[T] {
 	return l.tail
 }
 
-func (l *List[T]) Length() uint {
+func (l *list[T]) Length() uint {
 	return l.len
 }
 
-func (l *List[T]) Push(value T) *List[T] {
+func (l *list[T]) Push(value T) SLL[T] {
 	node := &Node[T]{value, nil}
 	if l.head == nil {
 		l.head = node
@@ -49,7 +50,7 @@ func (l *List[T]) Push(value T) *List[T] {
 	return l
 }
 
-func (l *List[T]) Pop() *Node[T] {
+func (l *list[T]) Pop() *Node[T] {
 	if l.len == 0 {
 		return nil
 	}
@@ -72,7 +73,7 @@ func (l *List[T]) Pop() *Node[T] {
 	return curr
 }
 
-func (l *List[T]) Shift() *Node[T] {
+func (l *list[T]) Shift() *Node[T] {
 	if l.len == 0 {
 		return nil
 	}
@@ -83,4 +84,12 @@ func (l *List[T]) Shift() *Node[T] {
 		l.tail = nil
 	}
 	return node
+}
+
+func (l *list[T]) Unshift(value T) SLL[T] {
+	node := &Node[T]{value, nil}
+	node.Next = l.Head()
+	l.head = node
+	l.len++
+	return l
 }
