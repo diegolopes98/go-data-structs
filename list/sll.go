@@ -17,6 +17,10 @@ type Node[T interface{}] struct {
 	Next *Node[T]
 }
 
+func NewNode[T interface{}](value T) *Node[T]{
+	return &Node[T]{value, nil}
+}
+
 type list[T interface{}] struct {
 	head *Node[T]
 	tail *Node[T]
@@ -40,7 +44,7 @@ func (l *list[T]) Length() uint {
 }
 
 func (l *list[T]) Push(value T) SLL[T] {
-	node := &Node[T]{value, nil}
+	node := NewNode(value)
 	if l.head == nil {
 		l.head = node
 		l.tail = node
@@ -89,7 +93,7 @@ func (l *list[T]) Shift() *Node[T] {
 }
 
 func (l *list[T]) Unshift(value T) SLL[T] {
-	node := &Node[T]{value, nil}
+	node := NewNode(value)
 	node.Next = l.Head()
 	l.head = node
 	l.len++
