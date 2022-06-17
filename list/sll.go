@@ -12,6 +12,7 @@ type SLL[T interface{}] interface {
 	Set(index uint, value T)
 	Insert(index uint, value T) SLL[T]
 	Remove(index uint)
+	Reverse()
 }
 
 type Node[T interface{}] struct {
@@ -138,15 +139,29 @@ func (l *list[T]) Insert(index uint, value T) SLL[T] {
 func (l *list[T]) Remove(index uint) {
 	if index == 0 {
 		l.Shift()
-	} else if index == l.Length() - 1 {
+	} else if index == l.Length()-1 {
 		l.Pop()
 	} else {
 		prev := l.Get(index - 1)
-		if (prev != nil) {
+		if prev != nil {
 			curr := prev.Next
 			next := curr.Next
 			prev.Next = next
 			l.len--
 		}
+	}
+}
+
+func (l *list[T]) Reverse() {
+	curr := l.head
+	l.head = l.tail
+	l.tail = curr
+	var prev *Node[T]
+	var next *Node[T]
+	for curr != nil {
+		next = curr.Next
+		curr.Next = prev
+		prev = curr
+		curr = next
 	}
 }
