@@ -165,3 +165,33 @@ func (l *list[T]) Reverse() {
 		curr = next
 	}
 }
+
+func ForEach[T interface{}](l SLL[T], f func(T) T) {
+	curr := l.Head()
+	for curr != nil {
+		curr.Value = f(curr.Value)
+		curr = curr.Next
+	}
+}
+
+func Filter[T interface{}](l SLL[T], f func(T) bool) SLL[T] {
+	nl := NewSLL[T]()
+	curr := l.Head()
+	for curr != nil {
+		if f(curr.Value) {
+			nl.Push(curr.Value)
+		}
+		curr = curr.Next
+	}
+	return nl
+}
+
+func Map[T, N interface{}](l SLL[T], f func(T) N) SLL[N] {
+	nl := NewSLL[N]()
+	curr := l.Head()
+	for curr != nil {
+		nl.Push(f(curr.Value))
+		curr = curr.Next
+	}
+	return nl
+}
