@@ -59,7 +59,7 @@ func (l *list[T]) Push(value T) SLL[T] {
 }
 
 func (l *list[T]) Pop() *Node[T] {
-	if l.len == 0 {
+	if l.Length() == 0 {
 		return nil
 	}
 	var curr *Node[T]
@@ -74,7 +74,7 @@ func (l *list[T]) Pop() *Node[T] {
 	}
 	l.tail = prev
 	l.len--
-	if l.len == 0 {
+	if l.Length() == 0 {
 		l.head = nil
 		l.tail = nil
 	}
@@ -82,13 +82,13 @@ func (l *list[T]) Pop() *Node[T] {
 }
 
 func (l *list[T]) Shift() *Node[T] {
-	if l.len == 0 {
+	if l.Length() == 0 {
 		return nil
 	}
 	node := l.Head()
 	l.head = node.Next
 	l.len--
-	if l.len == 0 {
+	if l.Length() == 0 {
 		l.tail = nil
 	}
 	return node
