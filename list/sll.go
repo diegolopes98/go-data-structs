@@ -166,10 +166,10 @@ func (l *list[T]) Reverse() {
 	}
 }
 
-func ForEach[T interface{}](l SLL[T], f func(T) T) {
+func ForEach[T interface{}](l SLL[T], f func(*Node[T])) {
 	curr := l.Head()
 	for curr != nil {
-		curr.Value = f(curr.Value)
+		f(curr)
 		curr = curr.Next
 	}
 }
