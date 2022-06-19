@@ -72,3 +72,20 @@ func (l *list[T]) Push(value T) *list[T] {
 	l.len++
 	return l
 }
+
+func (l *list[T]) Pop() lists.Node[T] {
+	if l.Length() == 0 {
+		return nil
+	}
+	popped := l.Tail()
+	if l.Length() > 1 {
+		l.tail = popped.GetPrevious()
+		l.Tail().SetNext(nil)
+		popped.SetPrevious(nil)
+	} else {
+		l.head = nil
+		l.tail = nil
+	}
+	l.len--
+	return popped
+}
