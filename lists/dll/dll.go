@@ -62,8 +62,13 @@ func (l *list[T]) Length() uint {
 func (l *list[T]) Push(value T) *list[T] {
 	node := NewNode(value)
 	node.SetPrevious(l.Tail())
-	l.Tail().SetNext(node)
-	l.tail = node
+	if l.Length() == 0 {
+		l.head = node
+		l.tail = node
+	} else {
+		l.Tail().SetNext(node)
+		l.tail = node
+	}
 	l.len++
 	return l
 }
