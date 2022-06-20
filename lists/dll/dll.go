@@ -147,3 +147,21 @@ func (l *list[T]) Set(index uint, value T) {
 		node.SetValue(value)
 	}
 }
+
+func (l *list[T]) Insert(index uint, value T) *list[T] {
+	if index == 0 {
+		l.Unshift(value)
+	} else {
+		prev := l.Get(index - 1)
+		if prev != nil {
+			node := NewNode(value)
+			next := prev.GetNext()
+			node.SetNext(next)
+			next.SetPrevious(node)
+			node.SetPrevious(prev)
+			prev.SetNext(node)
+			l.len++
+		}
+	}
+	return l
+}
