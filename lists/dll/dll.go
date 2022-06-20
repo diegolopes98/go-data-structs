@@ -196,3 +196,33 @@ func (l *list[T]) Reverse() {
 		curr = next
 	}
 }
+
+func ForEach[T any](l lists.List[T], f func(lists.Node[T])) {
+	curr := l.Head()
+	for curr != nil {
+		f(curr)
+		curr = curr.GetNext()
+	}
+}
+
+func Filter[T any](l lists.List[T], f func(T) bool) lists.List[T] {
+	nl := NewDLL[T]()
+	curr := l.Head()
+	for curr != nil {
+		if f(curr.GetValue()) {
+			nl.Push(curr.GetValue())
+		}
+		curr = curr.GetNext()
+	}
+	return nl
+}
+
+func Map[T, N any](l lists.List[T], f func(T) N) lists.List[N] {
+	nl := NewDLL[N]()
+	curr := l.Head()
+	for curr != nil {
+		nl.Push(f(curr.GetValue()))
+		curr = curr.GetNext()
+	}
+	return nl
+}
