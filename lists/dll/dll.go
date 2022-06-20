@@ -89,3 +89,34 @@ func (l *list[T]) Pop() lists.Node[T] {
 	l.len--
 	return popped
 }
+
+func (l *list[T]) Shift() lists.Node[T] {
+	if l.Length() == 0 {
+		return nil
+	}
+	shifted := l.Head()
+	if l.Length() > 1 {
+		l.head = shifted.GetPrevious()
+		l.Head().SetPrevious(nil)
+		shifted.SetNext(nil)
+	} else {
+		l.head = nil
+		l.tail = nil
+	}
+	l.len--
+	return shifted
+}
+
+func (l *list[T]) Unshift(value T) *list[T] {
+	node := NewNode(value)
+	if l.Length() == 0 {
+		l.head = node
+		l.tail = node
+	} else {
+		l.Head().SetPrevious(node)
+		node.SetNext(l.head)
+		l.head = node
+	}
+	l.len++
+	return l
+}
