@@ -165,3 +165,20 @@ func (l *list[T]) Insert(index uint, value T) *list[T] {
 	}
 	return l
 }
+
+func (l *list[T]) Remove(index uint) {
+	if index == 0 {
+		l.Shift()
+	} else if index == l.Length()-1 {
+		l.Pop()
+	} else {
+		prev := l.Get(index - 1)
+		if prev != nil {
+			curr := prev.GetNext()
+			next := curr.GetNext()
+			prev.SetNext(next)
+			next.SetPrevious(prev)
+			l.len--
+		}
+	}
+}
