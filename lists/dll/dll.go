@@ -182,3 +182,18 @@ func (l *list[T]) Remove(index uint) {
 		}
 	}
 }
+
+func (l *list[T]) Reverse() {
+	curr := l.Head()
+	l.head = l.Tail()
+	l.tail = curr
+	var prev lists.Node[T]
+	var next lists.Node[T]
+	for i := uint(0); i < l.Length(); i++ {
+		next = curr.GetNext()
+		curr.SetNext(prev)
+		curr.SetPrevious(next)
+		prev = curr
+		curr = next
+	}
+}
