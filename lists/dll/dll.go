@@ -120,3 +120,23 @@ func (l *list[T]) Unshift(value T) *list[T] {
 	l.len++
 	return l
 }
+
+func (l *list[T]) Get(index uint) lists.Node[T] {
+	if index > l.Length()-1 {
+		return nil
+	}
+	headstart := index <= l.Length()/2
+	var node lists.Node[T]
+	if headstart {
+		node = l.Head()
+		for i := uint(0); i < index; i++ {
+			node = node.GetNext()
+		}
+	} else {
+		node = l.Tail()
+		for i := l.Length() - 1; i > index; i-- {
+			node = node.GetPrevious()
+		}
+	}
+	return node
+}
