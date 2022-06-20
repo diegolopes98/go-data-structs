@@ -1,33 +1,33 @@
 package stack
 
-type Node[T any] interface {
-	GetValue() T
-	SetValue(value T)
-	GetNext() Node[T]
-	SetNext(value Node[T])
+type node[T any] interface {
+	getvalue() T
+	setvalue(value T)
+	getnext() node[T]
+	setnext(value node[T])
 }
 
-type node[T any] struct {
+type snode[T any] struct {
 	value T
-	next  Node[T]
+	next  node[T]
 }
 
-func NewNode[T any](value T) Node[T] {
-	return &node[T]{value, nil}
+func newnode[T any](value T) node[T] {
+	return &snode[T]{value, nil}
 }
 
-func (n *node[T]) SetValue(value T) {
+func (n *snode[T]) setvalue(value T) {
 	n.value = value
 }
 
-func (n *node[T]) GetValue() T {
+func (n *snode[T]) getvalue() T {
 	return n.value
 }
 
-func (n *node[T]) SetNext(node Node[T]) {
-	n.next = node
+func (n *snode[T]) setnext(snode node[T]) {
+	n.next = snode
 }
 
-func (n *node[T]) GetNext() Node[T] {
+func (n *snode[T]) getnext() node[T] {
 	return n.next
 }

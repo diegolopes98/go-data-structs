@@ -7,8 +7,8 @@ type Stack[T any] interface {
 }
 
 type stack[T any] struct {
-	first Node[T]
-	last  Node[T]
+	first node[T]
+	last  node[T]
 	size  uint
 }
 
@@ -21,13 +21,13 @@ func (s *stack[T]) Size() uint {
 }
 
 func (s *stack[T]) Push(value T) Stack[T] {
-	node := NewNode(value)
+	node := newnode(value)
 	if s.size == 0 {
 		s.first = node
 		s.last = node
 	} else {
 		oldfirst := s.first
-		node.SetNext(oldfirst)
+		node.setnext(oldfirst)
 		s.first = node
 	}
 	s.size++
@@ -39,11 +39,11 @@ func (s *stack[T]) Pop() *T {
 		return nil
 	}
 	popped := s.first
-	s.first = popped.GetNext()
+	s.first = popped.getnext()
 	s.size--
 	if s.size == 0 {
 		s.last = nil
 	}
-	value := popped.GetValue()
+	value := popped.getvalue()
 	return &value
 }
