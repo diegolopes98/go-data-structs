@@ -42,8 +42,7 @@ type list[T any] struct {
 	len  uint
 }
 
-// TODO: change every *list[T] return type to lists.List[T] when implementation complete
-func NewDLL[T any]() *list[T] {
+func NewDLL[T any]() lists.List[T] {
 	return &list[T]{nil, nil, 0}
 }
 
@@ -59,7 +58,7 @@ func (l *list[T]) Length() uint {
 	return l.len
 }
 
-func (l *list[T]) Push(value T) *list[T] {
+func (l *list[T]) Push(value T) lists.List[T] {
 	node := NewNode(value)
 	node.SetPrevious(l.Tail())
 	if l.Length() == 0 {
@@ -107,7 +106,7 @@ func (l *list[T]) Shift() lists.Node[T] {
 	return shifted
 }
 
-func (l *list[T]) Unshift(value T) *list[T] {
+func (l *list[T]) Unshift(value T) lists.List[T] {
 	node := NewNode(value)
 	if l.Length() == 0 {
 		l.head = node
@@ -148,7 +147,7 @@ func (l *list[T]) Set(index uint, value T) {
 	}
 }
 
-func (l *list[T]) Insert(index uint, value T) *list[T] {
+func (l *list[T]) Insert(index uint, value T) lists.List[T] {
 	if index == 0 {
 		l.Unshift(value)
 	} else {
