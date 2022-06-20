@@ -140,3 +140,10 @@ func (l *list[T]) Get(index uint) lists.Node[T] {
 	}
 	return node
 }
+
+func (l *list[T]) Set(index uint, value T) {
+	node := l.Get(index)
+	if node != nil {
+		node.SetValue(value)
+	}
+}
