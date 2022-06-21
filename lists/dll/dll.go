@@ -22,7 +22,7 @@ type list[T any] struct {
 	len  uint
 }
 
-func NewDLL[T any]() lists.List[T] {
+func New[T any]() lists.List[T] {
 	return &list[T]{nil, nil, 0}
 }
 
@@ -202,7 +202,7 @@ func ForEach[T any](l *list[T], f func(*T)) {
 }
 
 func Filter[T any](l *list[T], f func(T) bool) lists.List[T] {
-	nl := NewDLL[T]()
+	nl := New[T]()
 	curr := l.head
 	for curr != nil {
 		if f(curr.value) {
@@ -214,7 +214,7 @@ func Filter[T any](l *list[T], f func(T) bool) lists.List[T] {
 }
 
 func Map[T, N any](l *list[T], f func(T) N) lists.List[N] {
-	nl := NewDLL[N]()
+	nl := New[N]()
 	curr := l.head
 	for curr != nil {
 		nl.Push(f(curr.value))
