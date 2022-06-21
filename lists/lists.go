@@ -13,4 +13,5 @@ type List[T any] interface {
 	Insert(index uint, value T) List[T]
 	Remove(index uint) (T, error)
 	Reverse()
+	ForEach(f func(*T))
 }

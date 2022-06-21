@@ -193,7 +193,8 @@ func (l *list[T]) Reverse() {
 	}
 }
 
-func ForEach[T any](l *list[T], f func(*T)) {
+// TODO: research how to don't need the for each method exposed
+func (l *list[T]) ForEach(f func(*T)) {
 	curr := l.head
 	for curr != nil {
 		f(&curr.value)
@@ -201,24 +202,25 @@ func ForEach[T any](l *list[T], f func(*T)) {
 	}
 }
 
-func Filter[T any](l *list[T], f func(T) bool) lists.List[T] {
+// TODO: research how to reuse auxiliary methods
+func ForEach[T any](l lists.List[T], f func(*T)) {
+	l.ForEach(f)
+}
+
+func Filter[T any](l lists.List[T], f func(T) bool) lists.List[T] {
 	nl := New[T]()
-	curr := l.head
-	for curr != nil {
-		if f(curr.value) {
-			nl.Push(curr.value)
+	l.ForEach(func(value *T) {
+		if f(*value) {
+			nl.Push(*value)
 		}
-		curr = curr.next
-	}
+	})
 	return nl
 }
 
-func Map[T, N any](l *list[T], f func(T) N) lists.List[N] {
+func Map[T, N any](l lists.List[T], f func(T) N) lists.List[N] {
 	nl := New[N]()
-	curr := l.head
-	for curr != nil {
-		nl.Push(f(curr.value))
-		curr = curr.next
-	}
+	l.ForEach(func(value *T) {
+		nl.Push(f(*value))
+	})
 	return nl
 }
