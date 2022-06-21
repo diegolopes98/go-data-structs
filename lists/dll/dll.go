@@ -1,44 +1,24 @@
 package dll
 
-import "github.com/diegolopes98/go-data-structs/lists"
+import (
+	"errors"
 
-type node[T any] struct {
+	"github.com/diegolopes98/go-data-structs/lists"
+)
+
+type dnode[T any] struct {
 	value T
-	next  lists.Node[T]
-	prev  lists.Node[T]
+	next  *dnode[T]
+	prev  *dnode[T]
 }
 
-func NewNode[T any](value T) lists.Node[T] {
-	return &node[T]{value, nil, nil}
-}
-
-func (n *node[T]) SetValue(value T) {
-	n.value = value
-}
-
-func (n *node[T]) GetValue() T {
-	return n.value
-}
-
-func (n *node[T]) SetNext(node lists.Node[T]) {
-	n.next = node
-}
-
-func (n *node[T]) GetNext() lists.Node[T] {
-	return n.next
-}
-
-func (n *node[T]) SetPrevious(node lists.Node[T]) {
-	n.prev = node
-}
-
-func (n *node[T]) GetPrevious() lists.Node[T] {
-	return n.prev
+func newnode[T any](value T) *dnode[T] {
+	return &dnode[T]{value, nil, nil}
 }
 
 type list[T any] struct {
-	head lists.Node[T]
-	tail lists.Node[T]
+	head *dnode[T]
+	tail *dnode[T]
 	len  uint
 }
 
@@ -46,12 +26,18 @@ func NewDLL[T any]() lists.List[T] {
 	return &list[T]{nil, nil, 0}
 }
 
-func (l *list[T]) Head() lists.Node[T] {
-	return l.head
+func (l *list[T]) Head() (T, error) {
+	if l.len == 0 {
+		return *new(T), errors.New("empty list")
+	}
+	return l.head.value, nil
 }
 
-func (l *list[T]) Tail() lists.Node[T] {
-	return l.tail
+func (l *list[T]) Tail() (T, error) {
+	if l.len == 0 {
+		return *new(T), errors.New("empty list")
+	}
+	return l.tail.value, nil
 }
 
 func (l *list[T]) Length() uint {
@@ -59,91 +45,99 @@ func (l *list[T]) Length() uint {
 }
 
 func (l *list[T]) Push(value T) lists.List[T] {
-	node := NewNode(value)
-	node.SetPrevious(l.Tail())
-	if l.Length() == 0 {
+	node := newnode(value)
+	node.prev = l.tail
+	if l.len == 0 {
 		l.head = node
 		l.tail = node
 	} else {
-		l.Tail().SetNext(node)
+		l.tail.next = node
 		l.tail = node
 	}
 	l.len++
 	return l
 }
 
-func (l *list[T]) Pop() lists.Node[T] {
-	if l.Length() == 0 {
-		return nil
+func (l *list[T]) Pop() (T, error) {
+	if l.len == 0 {
+		return *new(T), errors.New("empty list")
 	}
-	popped := l.Tail()
-	if l.Length() > 1 {
-		l.tail = popped.GetPrevious()
-		l.Tail().SetNext(nil)
-		popped.SetPrevious(nil)
+	popped := l.tail
+	if l.len > 1 {
+		l.tail = popped.prev
+		l.tail.next = nil
+		popped.prev = nil
 	} else {
 		l.head = nil
 		l.tail = nil
 	}
 	l.len--
-	return popped
+	return popped.value, nil
 }
 
-func (l *list[T]) Shift() lists.Node[T] {
-	if l.Length() == 0 {
-		return nil
+func (l *list[T]) Shift() (T, error) {
+	if l.len == 0 {
+		return *new(T), errors.New("empty list")
 	}
-	shifted := l.Head()
-	if l.Length() > 1 {
-		l.head = shifted.GetPrevious()
-		l.Head().SetPrevious(nil)
-		shifted.SetNext(nil)
+	shifted := l.head
+	if l.len > 1 {
+		l.head = shifted.prev
+		l.head.prev = nil
+		shifted.next = nil
 	} else {
 		l.head = nil
 		l.tail = nil
 	}
 	l.len--
-	return shifted
+	return shifted.value, nil
 }
 
 func (l *list[T]) Unshift(value T) lists.List[T] {
-	node := NewNode(value)
-	if l.Length() == 0 {
+	node := newnode(value)
+	if l.len == 0 {
 		l.head = node
 		l.tail = node
 	} else {
-		l.Head().SetPrevious(node)
-		node.SetNext(l.head)
+		l.head.prev = node
+		node.next = l.head
 		l.head = node
 	}
 	l.len++
 	return l
 }
 
-func (l *list[T]) Get(index uint) lists.Node[T] {
-	if index > l.Length()-1 {
+func (l *list[T]) get(index uint) *dnode[T] {
+	if index > l.len-1 {
 		return nil
 	}
-	headstart := index <= l.Length()/2
-	var node lists.Node[T]
+	headstart := index <= l.len/2
+	var node *dnode[T]
 	if headstart {
-		node = l.Head()
+		node = l.head
 		for i := uint(0); i < index; i++ {
-			node = node.GetNext()
+			node = node.next
 		}
 	} else {
-		node = l.Tail()
-		for i := l.Length() - 1; i > index; i-- {
-			node = node.GetPrevious()
+		node = l.tail
+		for i := l.len - 1; i > index; i-- {
+			node = node.prev
 		}
 	}
 	return node
 }
 
+func (l *list[T]) Get(index uint) (T, error) {
+	node := l.get(index)
+	if node == nil {
+		return *new(T), errors.New("index out of bounds")
+	}
+	return node.value, nil
+}
+
 func (l *list[T]) Set(index uint, value T) {
-	node := l.Get(index)
+	node := l.get(index)
 	if node != nil {
-		node.SetValue(value)
+		node.value = value
 	}
 }
 
@@ -151,78 +145,80 @@ func (l *list[T]) Insert(index uint, value T) lists.List[T] {
 	if index == 0 {
 		l.Unshift(value)
 	} else {
-		prev := l.Get(index - 1)
+		prev := l.get(index - 1)
 		if prev != nil {
-			node := NewNode(value)
-			next := prev.GetNext()
-			node.SetNext(next)
-			next.SetPrevious(node)
-			node.SetPrevious(prev)
-			prev.SetNext(node)
+			node := newnode(value)
+			next := prev.next
+			node.next = next
+			next.prev = node
+			node.prev = prev
+			prev.next = node
 			l.len++
 		}
 	}
 	return l
 }
 
-func (l *list[T]) Remove(index uint) {
+func (l *list[T]) Remove(index uint) (T, error) {
 	if index == 0 {
 		l.Shift()
-	} else if index == l.Length()-1 {
+	} else if index == l.len-1 {
 		l.Pop()
 	} else {
-		prev := l.Get(index - 1)
+		prev := l.get(index - 1)
 		if prev != nil {
-			curr := prev.GetNext()
-			next := curr.GetNext()
-			prev.SetNext(next)
-			next.SetPrevious(prev)
+			curr := prev.next
+			next := curr.next
+			prev.next = next
+			next.prev = prev
 			l.len--
+			return curr.value, nil
 		}
 	}
+	return *new(T), errors.New("index out of bounds")
 }
 
 func (l *list[T]) Reverse() {
-	curr := l.Head()
-	l.head = l.Tail()
+	curr := l.head
+	l.head = l.tail
 	l.tail = curr
-	var prev lists.Node[T]
-	var next lists.Node[T]
-	for i := uint(0); i < l.Length(); i++ {
-		next = curr.GetNext()
-		curr.SetNext(prev)
-		curr.SetPrevious(next)
+	var prev *dnode[T]
+	var next *dnode[T]
+	for i := uint(0); i < l.len; i++ {
+		next = curr.next
+		curr.next = prev
+		curr.prev = next
 		prev = curr
 		curr = next
 	}
 }
 
-func ForEach[T any](l lists.List[T], f func(lists.Node[T])) {
-	curr := l.Head()
+func ForEach[T any](l *list[T], f func(*T)) {
+	curr := l.head
 	for curr != nil {
-		f(curr)
-		curr = curr.GetNext()
+		f(&curr.value)
+		curr = curr.next
 	}
 }
 
-func Filter[T any](l lists.List[T], f func(T) bool) lists.List[T] {
+func Filter[T any](l *list[T], f func(T) bool) lists.List[T] {
 	nl := NewDLL[T]()
-	curr := l.Head()
+	curr := l.head
 	for curr != nil {
-		if f(curr.GetValue()) {
-			nl.Push(curr.GetValue())
+		if f(curr.value) {
+			nl.Push(curr.value)
 		}
-		curr = curr.GetNext()
+		curr = curr.next
 	}
 	return nl
 }
 
-func Map[T, N any](l lists.List[T], f func(T) N) lists.List[N] {
+func Map[T, N any](l *list[T], f func(T) N) lists.List[N] {
 	nl := NewDLL[N]()
-	curr := l.Head()
+	curr := l.head
 	for curr != nil {
-		nl.Push(f(curr.GetValue()))
-		curr = curr.GetNext()
+		nl.Push(f(curr.value))
+		curr = curr.next
 	}
 	return nl
 }

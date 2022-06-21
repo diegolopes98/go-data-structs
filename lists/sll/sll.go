@@ -1,43 +1,23 @@
 package sll
 
-import "github.com/diegolopes98/go-data-structs/lists"
+import (
+	"errors"
 
-type node[T any] struct {
+	"github.com/diegolopes98/go-data-structs/lists"
+)
+
+type snode[T any] struct {
 	value T
-	next  lists.Node[T]
+	next  *snode[T]
 }
 
-func NewNode[T any](value T) lists.Node[T] {
-	return &node[T]{value, nil}
-}
-
-func (n *node[T]) SetValue(value T) {
-	n.value = value
-}
-
-func (n *node[T]) GetValue() T {
-	return n.value
-}
-
-func (n *node[T]) SetNext(node lists.Node[T]) {
-	n.next = node
-}
-
-func (n *node[T]) GetNext() lists.Node[T] {
-	return n.next
-}
-
-func (n *node[T]) SetPrevious(node lists.Node[T]) {
-	// TODO: review how to prevent empty implementation
-}
-
-func (n *node[T]) GetPrevious() lists.Node[T] {
-	return nil
+func newnode[T any](value T) *snode[T] {
+	return &snode[T]{value, nil}
 }
 
 type list[T any] struct {
-	head lists.Node[T]
-	tail lists.Node[T]
+	head *snode[T]
+	tail *snode[T]
 	len  uint
 }
 
@@ -45,12 +25,18 @@ func NewSLL[T any]() lists.List[T] {
 	return &list[T]{nil, nil, 0}
 }
 
-func (l *list[T]) Head() lists.Node[T] {
-	return l.head
+func (l *list[T]) Head() (T, error) {
+	if l.len == 0 {
+		return *new(T), errors.New("empty list")
+	}
+	return l.head.value, nil
 }
 
-func (l *list[T]) Tail() lists.Node[T] {
-	return l.tail
+func (l *list[T]) Tail() (T, error) {
+	if l.len == 0 {
+		return *new(T), errors.New("empty list")
+	}
+	return l.tail.value, nil
 }
 
 func (l *list[T]) Length() uint {
@@ -58,77 +44,85 @@ func (l *list[T]) Length() uint {
 }
 
 func (l *list[T]) Push(value T) lists.List[T] {
-	node := NewNode(value)
+	node := newnode(value)
 	if l.head == nil {
 		l.head = node
 		l.tail = node
 	} else {
-		l.tail.SetNext(node)
+		l.tail.next = node
 		l.tail = node
 	}
 	l.len++
 	return l
 }
 
-func (l *list[T]) Pop() lists.Node[T] {
-	if l.Length() == 0 {
-		return nil
+func (l *list[T]) Pop() (T, error) {
+	if l.len == 0 {
+		return *new(T), errors.New("empty list")
 	}
-	var curr lists.Node[T]
-	var prev lists.Node[T]
-	curr = l.Head()
-	if curr.GetNext() != nil {
-		for curr.GetNext() != nil {
+	var curr *snode[T]
+	var prev *snode[T]
+	curr = l.head
+	if curr.next != nil {
+		for curr.next != nil {
 			prev = curr
-			curr = curr.GetNext()
+			curr = curr.next
 		}
-		prev.SetNext(nil)
+		prev.next = nil
 	}
 	l.tail = prev
 	l.len--
-	if l.Length() == 0 {
+	if l.len == 0 {
 		l.head = nil
 		l.tail = nil
 	}
-	return curr
+	return curr.value, nil
 }
 
-func (l *list[T]) Shift() lists.Node[T] {
-	if l.Length() == 0 {
-		return nil
+func (l *list[T]) Shift() (T, error) {
+	if l.len == 0 {
+		return *new(T), errors.New("empty list")
 	}
-	node := l.Head()
-	l.head = node.GetNext()
+	node := l.head
+	l.head = node.next
 	l.len--
-	if l.Length() == 0 {
+	if l.len == 0 {
 		l.tail = nil
 	}
-	return node
+	return node.value, nil
 }
 
 func (l *list[T]) Unshift(value T) lists.List[T] {
-	node := NewNode(value)
-	node.SetNext(l.Head())
+	node := newnode(value)
+	node.next = l.head
 	l.head = node
 	l.len++
 	return l
 }
 
-func (l *list[T]) Get(index uint) lists.Node[T] {
+func (l *list[T]) Get(index uint) (T, error) {
+	node := l.get(index)
+	if node == nil {
+		return *new(T), errors.New("index out of bounds")
+	}
+	return node.value, nil
+}
+
+func (l *list[T]) get(index uint) *snode[T] {
 	if index > l.len-1 {
 		return nil
 	}
-	curr := l.Head()
+	curr := l.head
 	for i := uint(0); i < index; i++ {
-		curr = curr.GetNext()
+		curr = curr.next
 	}
 	return curr
 }
 
 func (l *list[T]) Set(index uint, value T) {
-	node := l.Get(index)
+	node := l.get(index)
 	if node != nil {
-		node.SetValue(value)
+		node.value = value
 	}
 }
 
@@ -136,73 +130,75 @@ func (l *list[T]) Insert(index uint, value T) lists.List[T] {
 	if index == 0 {
 		l.Unshift(value)
 	} else {
-		prevNode := l.Get(index - 1)
+		prevNode := l.get(index - 1)
 		if prevNode != nil {
-			node := NewNode(value)
-			node.SetNext(prevNode.GetNext())
-			prevNode.SetNext(node)
+			node := newnode(value)
+			node.next = prevNode.next
+			prevNode.next = node
 			l.len++
 		}
 	}
 	return l
 }
 
-func (l *list[T]) Remove(index uint) {
+func (l *list[T]) Remove(index uint) (T, error) {
 	if index == 0 {
-		l.Shift()
-	} else if index == l.Length()-1 {
-		l.Pop()
+		return l.Shift()
+	} else if index == l.len-1 {
+		return l.Pop()
 	} else {
-		prev := l.Get(index - 1)
+		prev := l.get(index - 1)
 		if prev != nil {
-			curr := prev.GetNext()
-			next := curr.GetNext()
-			prev.SetNext(next)
+			curr := prev.next
+			next := curr.next
+			prev.next = next
 			l.len--
+			return curr.value, nil
 		}
 	}
+	return *new(T), errors.New("index out of bounds")
 }
 
 func (l *list[T]) Reverse() {
 	curr := l.head
 	l.head = l.tail
 	l.tail = curr
-	var prev lists.Node[T]
-	var next lists.Node[T]
+	var prev *snode[T]
+	var next *snode[T]
 	for curr != nil {
-		next = curr.GetNext()
-		curr.SetNext(prev)
+		next = curr.next
+		curr.next = prev
 		prev = curr
 		curr = next
 	}
 }
 
-func ForEach[T any](l lists.List[T], f func(lists.Node[T])) {
-	curr := l.Head()
+func ForEach[T any](l *list[T], f func(*T)) {
+	curr := l.head
 	for curr != nil {
-		f(curr)
-		curr = curr.GetNext()
+		f(&curr.value)
+		curr = curr.next
 	}
 }
 
-func Filter[T any](l lists.List[T], f func(T) bool) lists.List[T] {
+func Filter[T any](l *list[T], f func(T) bool) lists.List[T] {
 	nl := NewSLL[T]()
-	curr := l.Head()
+	curr := l.head
 	for curr != nil {
-		if f(curr.GetValue()) {
-			nl.Push(curr.GetValue())
+		if f(curr.value) {
+			nl.Push(curr.value)
 		}
-		curr = curr.GetNext()
+		curr = curr.next
 	}
 	return nl
 }
 
-func Map[T, N any](l lists.List[T], f func(T) N) lists.List[N] {
+func Map[T, N any](l *list[T], f func(T) N) lists.List[N] {
 	nl := NewSLL[N]()
-	curr := l.Head()
+	curr := l.head
 	for curr != nil {
-		nl.Push(f(curr.GetValue()))
-		curr = curr.GetNext()
+		nl.Push(f(curr.value))
+		curr = curr.next
 	}
 	return nl
 }
