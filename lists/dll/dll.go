@@ -6,6 +6,11 @@ import (
 	"github.com/diegolopes98/go-data-structs/lists"
 )
 
+const (
+	emptyerr       = "empty list"
+	outofboundserr = "index out of bounds"
+)
+
 type dnode[T any] struct {
 	value T
 	next  *dnode[T]
@@ -28,14 +33,14 @@ func New[T any]() lists.List[T] {
 
 func (l *list[T]) Head() (T, error) {
 	if l.len == 0 {
-		return *new(T), errors.New("empty list")
+		return *new(T), errors.New(emptyerr)
 	}
 	return l.head.value, nil
 }
 
 func (l *list[T]) Tail() (T, error) {
 	if l.len == 0 {
-		return *new(T), errors.New("empty list")
+		return *new(T), errors.New(emptyerr)
 	}
 	return l.tail.value, nil
 }
@@ -60,7 +65,7 @@ func (l *list[T]) Push(value T) lists.List[T] {
 
 func (l *list[T]) Pop() (T, error) {
 	if l.len == 0 {
-		return *new(T), errors.New("empty list")
+		return *new(T), errors.New(emptyerr)
 	}
 	popped := l.tail
 	if l.len > 1 {
@@ -77,7 +82,7 @@ func (l *list[T]) Pop() (T, error) {
 
 func (l *list[T]) Shift() (T, error) {
 	if l.len == 0 {
-		return *new(T), errors.New("empty list")
+		return *new(T), errors.New(emptyerr)
 	}
 	shifted := l.head
 	if l.len > 1 {
@@ -129,7 +134,7 @@ func (l *list[T]) get(index uint) *dnode[T] {
 func (l *list[T]) Get(index uint) (T, error) {
 	node := l.get(index)
 	if node == nil {
-		return *new(T), errors.New("index out of bounds")
+		return *new(T), errors.New(outofboundserr)
 	}
 	return node.value, nil
 }
@@ -175,7 +180,7 @@ func (l *list[T]) Remove(index uint) (T, error) {
 			return curr.value, nil
 		}
 	}
-	return *new(T), errors.New("index out of bounds")
+	return *new(T), errors.New(outofboundserr)
 }
 
 func (l *list[T]) Reverse() {
