@@ -99,8 +99,13 @@ func (l *list[T]) Shift() (T, error) {
 
 func (l *list[T]) Unshift(value T) lists.List[T] {
 	node := newnode(value)
-	node.next = l.head
-	l.head = node
+	if l.len == 0 {
+		l.head = node
+		l.tail = node
+	} else {
+		node.next = l.head
+		l.head = node
+	}
 	l.len++
 	return l
 }
