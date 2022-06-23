@@ -50,6 +50,5 @@ func (s *stack[T]) Pop() (T, error) {
 	if s.size == 0 {
 		s.last = nil
 	}
-	value := popped.getvalue()
-	return value, nil
+	return popped.getvalue(), nil
 }

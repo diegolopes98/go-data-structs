@@ -46,10 +46,10 @@ func (q *queue[T]) Dequeue() (T, error) {
 		return *new(T), errors.New(emptyerr)
 	}
 	dequeued := q.first
-	if q.size == 1 {
-		q.last = nil
-	}
 	q.first = q.first.getnext()
 	q.size--
+	if q.size == 0 {
+		q.last = nil
+	}
 	return dequeued.getvalue(), nil
 }
