@@ -1,25 +1,17 @@
 package lists
 
-type Node[T any] interface {
-	SetValue(value T)
-	GetValue() T
-	SetNext(node Node[T])
-	GetNext() Node[T]
-	SetPrevious(node Node[T])
-	GetPrevious() Node[T]
-}
-
 type List[T any] interface {
-	Head() Node[T]
-	Tail() Node[T]
+	Head() (T, error)
+	Tail() (T, error)
 	Length() uint
 	Push(value T) List[T]
-	Pop() Node[T]
-	Shift() Node[T]
+	Pop() (T, error)
+	Shift() (T, error)
 	Unshift(value T) List[T]
-	Get(index uint) Node[T]
+	Get(index uint) (T, error)
 	Set(index uint, value T)
 	Insert(index uint, value T) List[T]
-	Remove(index uint)
+	Remove(index uint) (T, error)
 	Reverse()
+	ForEach(f func(*T))
 }
