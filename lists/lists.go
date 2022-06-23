@@ -15,3 +15,25 @@ type List[T any] interface {
 	Reverse()
 	ForEach(f func(*T))
 }
+
+func ForEach[T any](l List[T], f func(*T)) {
+	l.ForEach(f)
+}
+
+func Filter[T any](l List[T], new func() List[T], f func(T) bool) List[T] {
+	nl := new()
+	l.ForEach(func(value *T) {
+		if f(*value) {
+			nl.Push(*value)
+		}
+	})
+	return nl
+}
+
+func Map[T, N any](l List[T], new func() List[N], f func(T) N) List[N] {
+	nl := new()
+	l.ForEach(func(value *T) {
+		nl.Push(f(*value))
+	})
+	return nl
+}
