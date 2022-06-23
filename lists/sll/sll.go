@@ -178,7 +178,6 @@ func (l *list[T]) Reverse() {
 	}
 }
 
-// TODO: research how to don't need the for each method exposed
 func (l *list[T]) ForEach(f func(*T)) {
 	curr := l.head
 	for curr != nil {
@@ -187,25 +186,16 @@ func (l *list[T]) ForEach(f func(*T)) {
 	}
 }
 
-// TODO: research how to reuse auxiliary methods
 func ForEach[T any](l lists.List[T], f func(*T)) {
-	l.ForEach(f)
+	lists.ForEach(l, f)
 }
 
 func Filter[T any](l lists.List[T], f func(T) bool) lists.List[T] {
-	nl := New[T]()
-	l.ForEach(func(value *T) {
-		if f(*value) {
-			nl.Push(*value)
-		}
-	})
-	return nl
+	new := New[T]
+	return lists.Filter(l, new, f)
 }
 
 func Map[T, N any](l lists.List[T], f func(T) N) lists.List[N] {
-	nl := New[N]()
-	l.ForEach(func(value *T) {
-		nl.Push(f(*value))
-	})
-	return nl
+	new := New[N]
+	return lists.Map(l, new, f)
 }
