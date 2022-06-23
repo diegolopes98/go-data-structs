@@ -1,9 +1,15 @@
 package stack
 
+import "errors"
+
+const (
+	emptyerr = "empty stack"
+)
+
 type Stack[T any] interface {
 	Size() uint
 	Push(value T) Stack[T]
-	Pop() *T
+	Pop() (T, error)
 }
 
 type stack[T any] struct {
@@ -12,7 +18,7 @@ type stack[T any] struct {
 	size  uint
 }
 
-func NewStack[T any]() Stack[T] {
+func New[T any]() Stack[T] {
 	return &stack[T]{nil, nil, 0}
 }
 
@@ -34,9 +40,9 @@ func (s *stack[T]) Push(value T) Stack[T] {
 	return s
 }
 
-func (s *stack[T]) Pop() *T {
+func (s *stack[T]) Pop() (T, error) {
 	if s.size == 0 {
-		return nil
+		return *new(T), errors.New(emptyerr)
 	}
 	popped := s.first
 	s.first = popped.getnext()
@@ -45,5 +51,5 @@ func (s *stack[T]) Pop() *T {
 		s.last = nil
 	}
 	value := popped.getvalue()
-	return &value
+	return value, nil
 }
