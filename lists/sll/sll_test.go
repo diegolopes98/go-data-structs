@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestNewSllSize(t *testing.T) {
+func TestNewSllLength(t *testing.T) {
 	sll := New[int]()
 	wantlen := uint(0)
 	length := sll.Length()
@@ -39,4 +39,11 @@ func TestNewSllPush(t *testing.T) {
 	assert.Equal(t, want, tail)
 	assert.Nil(t, errhead)
 	assert.Nil(t, errtail)
+}
+
+func TestSllLength(t *testing.T) {
+	sll := New[int]()
+	sll.Push(1)
+	want := uint(1)
+	assert.Equal(t, want, sll.Length())
 }
