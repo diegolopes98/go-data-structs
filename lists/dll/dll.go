@@ -112,7 +112,7 @@ func (l *list[T]) Unshift(value T) lists.List[T] {
 }
 
 func (l *list[T]) get(index uint) *dnode[T] {
-	if index > l.len-1 {
+	if l.len == 0 || index > l.len-1 {
 		return nil
 	}
 	headstart := index <= l.len/2

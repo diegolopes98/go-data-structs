@@ -119,7 +119,7 @@ func (l *list[T]) Get(index uint) (T, error) {
 }
 
 func (l *list[T]) get(index uint) *snode[T] {
-	if index > l.len-1 {
+	if l.len == 0 || index > l.len-1 {
 		return nil
 	}
 	curr := l.head
