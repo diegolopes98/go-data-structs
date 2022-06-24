@@ -203,3 +203,57 @@ func TestSllUnshift(t *testing.T) {
 	assert.Nil(t, errhead)
 	assert.Nil(t, errtail)
 }
+
+func TestSllGetOutOfBounds(t *testing.T) {
+	sll := New[int]()
+	sll.Unshift(1).Unshift(2).Unshift(3)
+	want := 0
+	value, err := sll.Get(100)
+	assert.Equal(t, want, value)
+	assert.NotNil(t, err)
+}
+
+func TestSllGet(t *testing.T) {
+	sll := New[int]()
+	sll.Unshift(1).Unshift(2).Unshift(3)
+	want := 1
+	value, err := sll.Get(2)
+	assert.Equal(t, want, value)
+	assert.Nil(t, err)
+}
+
+func TestSllSetOutOfBounds(t *testing.T) {
+	sll := New[int]()
+	sll.Unshift(1).Unshift(2).Unshift(3)
+	wanthead := 3
+	wantmid := 2
+	wanttail := 1
+	sll.Set(100, 100)
+	head, errh := sll.Head()
+	mid, errm := sll.Get(1)
+	tail, errt := sll.Tail()
+	assert.Equal(t, wanthead, head)
+	assert.Equal(t, wantmid, mid)
+	assert.Equal(t, wanttail, tail)
+	assert.Nil(t, errh)
+	assert.Nil(t, errm)
+	assert.Nil(t, errt)
+}
+
+func TestSllSet(t *testing.T) {
+	sll := New[int]()
+	sll.Unshift(1).Unshift(2).Unshift(3)
+	wanthead := 3
+	wantmid := 100
+	wanttail := 1
+	sll.Set(1, 100)
+	head, errh := sll.Head()
+	mid, errm := sll.Get(1)
+	tail, errt := sll.Tail()
+	assert.Equal(t, wanthead, head)
+	assert.Equal(t, wantmid, mid)
+	assert.Equal(t, wanttail, tail)
+	assert.Nil(t, errh)
+	assert.Nil(t, errm)
+	assert.Nil(t, errt)
+}
