@@ -257,3 +257,59 @@ func TestSllSet(t *testing.T) {
 	assert.Nil(t, errm)
 	assert.Nil(t, errt)
 }
+
+func TestInsertAtBeginning(t *testing.T) {
+	sll := New[int]()
+	wantoldlen := uint(0)
+	wantnewlen := uint(1)
+	want := 10
+	oldlen := sll.Length()
+	sll.Insert(0, 10)
+	head, errh := sll.Head()
+	tail, errt := sll.Tail()
+	newlen := sll.Length()
+	assert.Equal(t, wantoldlen, oldlen)
+	assert.Equal(t, wantnewlen, newlen)
+	assert.Equal(t, want, head)
+	assert.Equal(t, want, tail)
+	assert.Nil(t, errh)
+	assert.Nil(t, errt)
+}
+
+func TestInsertOutOfBounds(t *testing.T) {
+	sll := New[int]()
+	wantoldlen := uint(0)
+	wantnewlen := uint(0)
+	want := 0
+	oldlen := sll.Length()
+	sll.Insert(1000, 10)
+	head, errh := sll.Head()
+	tail, errt := sll.Tail()
+	newlen := sll.Length()
+	assert.Equal(t, wantoldlen, oldlen)
+	assert.Equal(t, wantnewlen, newlen)
+	assert.Equal(t, want, head)
+	assert.Equal(t, want, tail)
+	assert.NotNil(t, errh)
+	assert.NotNil(t, errt)
+}
+
+func TestInsert(t *testing.T) {
+	sll := New[int]()
+	sll.Push(1).Push(3).Push(4)
+	wantoldlen := uint(3)
+	wantnewlen := uint(4)
+	want := 2
+	wantnext := 3
+	oldlen := sll.Length()
+	sll.Insert(1, 2)
+	newlen := sll.Length()
+	value, errv := sll.Get(1)
+	nextvalue, errnv := sll.Get(2)
+	assert.Equal(t, wantoldlen, oldlen)
+	assert.Equal(t, wantnewlen, newlen)
+	assert.Equal(t, want, value)
+	assert.Equal(t, wantnext, nextvalue)
+	assert.Nil(t, errv)
+	assert.Nil(t, errnv)
+}
