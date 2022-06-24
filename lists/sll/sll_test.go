@@ -84,13 +84,47 @@ func TestSllPush(t *testing.T) {
 func TestSllPopEmpty(t *testing.T) {
 	sll := New[int]()
 	want := 0
-	value, errv := sll.Pop()
 	head, errh := sll.Head()
 	tail, errt := sll.Tail()
+	value, errv := sll.Pop()
 	assert.Equal(t, want, value)
 	assert.Equal(t, want, head)
 	assert.Equal(t, want, tail)
 	assert.NotNil(t, errv)
 	assert.NotNil(t, errh)
 	assert.NotNil(t, errt)
+}
+
+func TestSllPopOneElem(t *testing.T) {
+	sll := New[int]()
+	sll.Push(1)
+	want := 1
+	head, errh := sll.Head()
+	tail, errt := sll.Tail()
+	value, errv := sll.Pop()
+	assert.Equal(t, want, value)
+	assert.Equal(t, want, head)
+	assert.Equal(t, want, tail)
+	assert.Nil(t, errv)
+	assert.Nil(t, errh)
+	assert.Nil(t, errt)
+}
+
+func TestSllPop(t *testing.T) {
+	sll := New[int]()
+	sll.Push(1).Push(2)
+	wanthead := 1
+	wanttail := 2
+	wantlen := uint(1)
+	head, errh := sll.Head()
+	tail, errt := sll.Tail()
+	value, errv := sll.Pop()
+	len := sll.Length()
+	assert.Equal(t, wanttail, value)
+	assert.Equal(t, wanttail, tail)
+	assert.Equal(t, wanthead, head)
+	assert.Equal(t, wantlen, len)
+	assert.Nil(t, errv)
+	assert.Nil(t, errh)
+	assert.Nil(t, errt)
 }
