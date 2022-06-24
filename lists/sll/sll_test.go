@@ -80,3 +80,17 @@ func TestSllPush(t *testing.T) {
 	assert.Nil(t, errhead)
 	assert.Nil(t, errtail)
 }
+
+func TestSllPopEmpty(t *testing.T) {
+	sll := New[int]()
+	want := 0
+	value, errv := sll.Pop()
+	head, errh := sll.Head()
+	tail, errt := sll.Tail()
+	assert.Equal(t, want, value)
+	assert.Equal(t, want, head)
+	assert.Equal(t, want, tail)
+	assert.NotNil(t, errv)
+	assert.NotNil(t, errh)
+	assert.NotNil(t, errt)
+}
