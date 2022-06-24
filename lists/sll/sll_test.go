@@ -47,3 +47,36 @@ func TestSllLength(t *testing.T) {
 	want := uint(1)
 	assert.Equal(t, want, sll.Length())
 }
+
+func TestSllHead(t *testing.T) {
+	sll := New[int]()
+	sll.Push(1)
+	want := 1
+	head, err := sll.Head()
+	assert.Equal(t, head, want)
+	assert.Nil(t, err)
+}
+
+func TestSllTail(t *testing.T) {
+	sll := New[int]()
+	sll.Push(1)
+	want := 1
+	tail, err := sll.Tail()
+	assert.Equal(t, tail, want)
+	assert.Nil(t, err)
+}
+
+func TestSllPush(t *testing.T) {
+	sll := New[int]()
+	sll.Push(1).Push(2).Push(3)
+	wanthead := 1
+	wanttail := 3
+	wantlen := uint(3)
+	head, errhead := sll.Head()
+	tail, errtail := sll.Tail()
+	assert.Equal(t, wanthead, head)
+	assert.Equal(t, wanttail, tail)
+	assert.Equal(t, wantlen, sll.Length())
+	assert.Nil(t, errhead)
+	assert.Nil(t, errtail)
+}
