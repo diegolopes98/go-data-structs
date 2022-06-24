@@ -128,3 +128,78 @@ func TestSllPop(t *testing.T) {
 	assert.Nil(t, errh)
 	assert.Nil(t, errt)
 }
+
+func TestSllShiftEmpty(t *testing.T) {
+	sll := New[int]()
+	want := 0
+	head, errh := sll.Head()
+	tail, errt := sll.Tail()
+	value, errv := sll.Shift()
+	assert.Equal(t, want, value)
+	assert.Equal(t, want, head)
+	assert.Equal(t, want, tail)
+	assert.NotNil(t, errv)
+	assert.NotNil(t, errh)
+	assert.NotNil(t, errt)
+}
+
+func TestSllShiftOneElem(t *testing.T) {
+	sll := New[int]()
+	sll.Push(1)
+	want := 1
+	head, errh := sll.Head()
+	tail, errt := sll.Tail()
+	value, errv := sll.Shift()
+	assert.Equal(t, want, value)
+	assert.Equal(t, want, head)
+	assert.Equal(t, want, tail)
+	assert.Nil(t, errv)
+	assert.Nil(t, errh)
+	assert.Nil(t, errt)
+}
+
+func TestSllShift(t *testing.T) {
+	sll := New[int]()
+	sll.Push(1).Push(2)
+	wanthead := 1
+	wanttail := 2
+	wantlen := uint(1)
+	head, errh := sll.Head()
+	tail, errt := sll.Tail()
+	value, errv := sll.Shift()
+	len := sll.Length()
+	assert.Equal(t, wanthead, value)
+	assert.Equal(t, wanthead, head)
+	assert.Equal(t, wanttail, tail)
+	assert.Equal(t, wantlen, len)
+	assert.Nil(t, errv)
+	assert.Nil(t, errh)
+	assert.Nil(t, errt)
+}
+
+func TestSllUnshiftEmpty(t *testing.T) {
+	sll := New[int]()
+	sll.Unshift(1)
+	want := 1
+	head, errhead := sll.Head()
+	tail, errtail := sll.Tail()
+	assert.Equal(t, want, head)
+	assert.Equal(t, want, tail)
+	assert.Nil(t, errhead)
+	assert.Nil(t, errtail)
+}
+
+func TestSllUnshift(t *testing.T) {
+	sll := New[int]()
+	sll.Unshift(1).Unshift(2).Unshift(3)
+	wanthead := 3
+	wanttail := 1
+	wantlen := uint(3)
+	head, errhead := sll.Head()
+	tail, errtail := sll.Tail()
+	assert.Equal(t, wanthead, head)
+	assert.Equal(t, wanttail, tail)
+	assert.Equal(t, wantlen, sll.Length())
+	assert.Nil(t, errhead)
+	assert.Nil(t, errtail)
+}
