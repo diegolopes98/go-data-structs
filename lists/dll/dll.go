@@ -204,17 +204,3 @@ func (l *list[T]) ForEach(f func(*T)) {
 		curr = curr.next
 	}
 }
-
-func ForEach[T any](l lists.List[T], f func(*T)) {
-	lists.ForEach(l, f)
-}
-
-func Filter[T any](l lists.List[T], f func(T) bool) lists.List[T] {
-	new := New[T]
-	return lists.Filter(l, new, f)
-}
-
-func Map[T, N any](l lists.List[T], f func(T) N) lists.List[N] {
-	new := New[N]
-	return lists.Map(l, new, f)
-}
