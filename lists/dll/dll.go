@@ -166,9 +166,9 @@ func (l *list[T]) Insert(index uint, value T) lists.List[T] {
 
 func (l *list[T]) Remove(index uint) (T, error) {
 	if index == 0 {
-		l.Shift()
+		return l.Shift()
 	} else if index == l.len-1 {
-		l.Pop()
+		return l.Pop()
 	} else {
 		prev := l.get(index - 1)
 		if prev != nil {
