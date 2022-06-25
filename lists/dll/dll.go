@@ -84,17 +84,16 @@ func (l *list[T]) Shift() (T, error) {
 	if l.len == 0 {
 		return *new(T), errors.New(emptyerr)
 	}
-	shifted := l.head
-	if l.len > 1 {
-		l.head = shifted.prev
+	node := l.head
+	l.head = node.next
+	if l.head != nil {
 		l.head.prev = nil
-		shifted.next = nil
-	} else {
-		l.head = nil
-		l.tail = nil
 	}
 	l.len--
-	return shifted.value, nil
+	if l.len == 0 {
+		l.tail = nil
+	}
+	return node.value, nil
 }
 
 func (l *list[T]) Unshift(value T) lists.List[T] {
