@@ -258,7 +258,7 @@ func TestSllSet(t *testing.T) {
 	assert.Nil(t, errt)
 }
 
-func TestInsertAtBeginning(t *testing.T) {
+func TestSllInsertAtBeginning(t *testing.T) {
 	sll := New[int]()
 	wantoldlen := uint(0)
 	wantnewlen := uint(1)
@@ -276,7 +276,7 @@ func TestInsertAtBeginning(t *testing.T) {
 	assert.Nil(t, errt)
 }
 
-func TestInsertOutOfBounds(t *testing.T) {
+func TestSllInsertOutOfBounds(t *testing.T) {
 	sll := New[int]()
 	wantoldlen := uint(0)
 	wantnewlen := uint(0)
@@ -294,7 +294,7 @@ func TestInsertOutOfBounds(t *testing.T) {
 	assert.NotNil(t, errt)
 }
 
-func TestInsert(t *testing.T) {
+func TestSllInsert(t *testing.T) {
 	sll := New[int]()
 	sll.Push(1).Push(3).Push(4)
 	wantoldlen := uint(3)
