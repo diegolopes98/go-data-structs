@@ -313,3 +313,38 @@ func TestSllInsert(t *testing.T) {
 	assert.Nil(t, errv)
 	assert.Nil(t, errnv)
 }
+
+func TestSllRemoveEmpty(t *testing.T) {
+	sll := New[int]()
+	want := 0
+	value, errv := sll.Remove(1)
+	assert.Equal(t, want, value)
+	assert.NotNil(t, errv)
+}
+
+func TestSllRemoveFromTheBeginning(t *testing.T) {
+	sll := New[int]()
+	sll.Push(1).Push(2)
+	want := 1
+	value, errv := sll.Remove(0)
+	assert.Equal(t, want, value)
+	assert.Nil(t, errv)
+}
+
+func TestSllRemoveFromTheEnd(t *testing.T) {
+	sll := New[int]()
+	sll.Push(1).Push(2)
+	want := 2
+	value, errv := sll.Remove(1)
+	assert.Equal(t, want, value)
+	assert.Nil(t, errv)
+}
+
+func TestSllRemoveFromTheMid(t *testing.T) {
+	sll := New[int]()
+	sll.Push(1).Push(2).Push(3)
+	want := 2
+	value, errv := sll.Remove(1)
+	assert.Equal(t, want, value)
+	assert.Nil(t, errv)
+}
