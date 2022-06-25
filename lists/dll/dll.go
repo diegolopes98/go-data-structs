@@ -115,7 +115,7 @@ func (l *list[T]) get(index uint) *dnode[T] {
 	if l.len == 0 || index > l.len-1 {
 		return nil
 	}
-	headstart := index <= l.len/2
+	headstart := index < l.len/2
 	var node *dnode[T]
 	if headstart {
 		node = l.head
