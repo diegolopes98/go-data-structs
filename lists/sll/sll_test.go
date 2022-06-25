@@ -348,3 +348,21 @@ func TestSllRemoveFromTheMid(t *testing.T) {
 	assert.Equal(t, want, value)
 	assert.Nil(t, errv)
 }
+
+func TestSllReverse(t *testing.T) {
+	sll := New[int]()
+	sll.Push(1).Push(2).Push(3)
+	wanthead := 3
+	wanttail := 1
+	wantmid := 2
+	sll.Reverse()
+	head, errh := sll.Head()
+	tail, errt := sll.Tail()
+	mid, errm := sll.Get(1)
+	assert.Equal(t, wanthead, head)
+	assert.Equal(t, wanttail, tail)
+	assert.Equal(t, wantmid, mid)
+	assert.Nil(t, errh)
+	assert.Nil(t, errt)
+	assert.Nil(t, errm)
+}
