@@ -366,3 +366,12 @@ func TestSllReverse(t *testing.T) {
 	assert.Nil(t, errt)
 	assert.Nil(t, errm)
 }
+
+func TestSllForEach(t *testing.T) {
+	sll := New[int]()
+	sll.Push(1).Push(2).Push(3)
+	want := []int{1, 2, 3}
+	sll.ForEach(func(number *int) {
+		assert.Contains(t, want, *number)
+	})
+}
