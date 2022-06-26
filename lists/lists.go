@@ -1,5 +1,7 @@
 package lists
 
+import "github.com/diegolopes98/go-data-structs/iterable"
+
 type listfactory[T any] func() List[T]
 
 type List[T any] interface {
@@ -15,9 +17,10 @@ type List[T any] interface {
 	Insert(index uint, value T) List[T]
 	Remove(index uint) (T, error)
 	Reverse()
-	ForEach(f func(*T))
+	iterable.Iterable[T]
 }
 
+// TODO: add tests
 func ForEach[T any](l List[T], f func(*T)) {
 	l.ForEach(f)
 }
