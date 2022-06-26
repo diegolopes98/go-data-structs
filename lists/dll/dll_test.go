@@ -1,20 +1,21 @@
-package dll
+package dll_test
 
 import (
 	"testing"
 
+	doubly "github.com/diegolopes98/go-data-structs/lists/dll"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestNewDllLength(t *testing.T) {
-	dll := New[int]()
+	dll := doubly.New[int]()
 	wantlen := uint(0)
 	length := dll.Length()
 	assert.Equal(t, wantlen, length)
 }
 
 func TestNewDllHead(t *testing.T) {
-	dll := New[int]()
+	dll := doubly.New[int]()
 	want := 0
 	head, err := dll.Head()
 	assert.Equal(t, head, want)
@@ -22,7 +23,7 @@ func TestNewDllHead(t *testing.T) {
 }
 
 func TestNewDllTail(t *testing.T) {
-	dll := New[int]()
+	dll := doubly.New[int]()
 	want := 0
 	tail, err := dll.Tail()
 	assert.Equal(t, tail, want)
@@ -30,7 +31,7 @@ func TestNewDllTail(t *testing.T) {
 }
 
 func TestNewDllPush(t *testing.T) {
-	dll := New[int]()
+	dll := doubly.New[int]()
 	dll.Push(1)
 	want := 1
 	head, errhead := dll.Head()
@@ -42,14 +43,14 @@ func TestNewDllPush(t *testing.T) {
 }
 
 func TestDllLength(t *testing.T) {
-	dll := New[int]()
+	dll := doubly.New[int]()
 	dll.Push(1)
 	want := uint(1)
 	assert.Equal(t, want, dll.Length())
 }
 
 func TestDllHead(t *testing.T) {
-	dll := New[int]()
+	dll := doubly.New[int]()
 	dll.Push(1)
 	want := 1
 	head, err := dll.Head()
@@ -58,7 +59,7 @@ func TestDllHead(t *testing.T) {
 }
 
 func TestDllTail(t *testing.T) {
-	dll := New[int]()
+	dll := doubly.New[int]()
 	dll.Push(1)
 	want := 1
 	tail, err := dll.Tail()
@@ -67,7 +68,7 @@ func TestDllTail(t *testing.T) {
 }
 
 func TestDllPush(t *testing.T) {
-	dll := New[int]()
+	dll := doubly.New[int]()
 	dll.Push(1).Push(2).Push(3)
 	wanthead := 1
 	wanttail := 3
@@ -82,7 +83,7 @@ func TestDllPush(t *testing.T) {
 }
 
 func TestDllPopEmpty(t *testing.T) {
-	dll := New[int]()
+	dll := doubly.New[int]()
 	want := 0
 	head, errh := dll.Head()
 	tail, errt := dll.Tail()
@@ -96,7 +97,7 @@ func TestDllPopEmpty(t *testing.T) {
 }
 
 func TestDllPopOneElem(t *testing.T) {
-	dll := New[int]()
+	dll := doubly.New[int]()
 	dll.Push(1)
 	want := 1
 	head, errh := dll.Head()
@@ -111,7 +112,7 @@ func TestDllPopOneElem(t *testing.T) {
 }
 
 func TestDllPop(t *testing.T) {
-	dll := New[int]()
+	dll := doubly.New[int]()
 	dll.Push(1).Push(2)
 	wanthead := 1
 	wanttail := 2
@@ -130,7 +131,7 @@ func TestDllPop(t *testing.T) {
 }
 
 func TestDllShiftEmpty(t *testing.T) {
-	dll := New[int]()
+	dll := doubly.New[int]()
 	want := 0
 	head, errh := dll.Head()
 	tail, errt := dll.Tail()
@@ -144,7 +145,7 @@ func TestDllShiftEmpty(t *testing.T) {
 }
 
 func TestDllShiftOneElem(t *testing.T) {
-	dll := New[int]()
+	dll := doubly.New[int]()
 	dll.Push(1)
 	want := 1
 	head, errh := dll.Head()
@@ -159,7 +160,7 @@ func TestDllShiftOneElem(t *testing.T) {
 }
 
 func TestDllShift(t *testing.T) {
-	dll := New[int]()
+	dll := doubly.New[int]()
 	dll.Push(1).Push(2)
 	wanthead := 1
 	wanttail := 2
@@ -178,7 +179,7 @@ func TestDllShift(t *testing.T) {
 }
 
 func TestDllUnshiftEmpty(t *testing.T) {
-	dll := New[int]()
+	dll := doubly.New[int]()
 	dll.Unshift(1)
 	want := 1
 	head, errhead := dll.Head()
@@ -190,7 +191,7 @@ func TestDllUnshiftEmpty(t *testing.T) {
 }
 
 func TestDllUnshift(t *testing.T) {
-	dll := New[int]()
+	dll := doubly.New[int]()
 	dll.Unshift(1).Unshift(2).Unshift(3)
 	wanthead := 3
 	wanttail := 1
@@ -205,7 +206,7 @@ func TestDllUnshift(t *testing.T) {
 }
 
 func TestDllGetOutOfBounds(t *testing.T) {
-	dll := New[int]()
+	dll := doubly.New[int]()
 	dll.Push(1).Push(2).Push(3)
 	want := 0
 	value, err := dll.Get(100)
@@ -214,7 +215,7 @@ func TestDllGetOutOfBounds(t *testing.T) {
 }
 
 func TestDllGetNearBeginning(t *testing.T) {
-	dll := New[int]()
+	dll := doubly.New[int]()
 	dll.Push(1).Push(2).Push(3).Push(4)
 	want := 2
 	value, err := dll.Get(1)
@@ -223,7 +224,7 @@ func TestDllGetNearBeginning(t *testing.T) {
 }
 
 func TestDllGetNearEnd(t *testing.T) {
-	dll := New[int]()
+	dll := doubly.New[int]()
 	dll.Push(1).Push(2).Push(3).Push(4)
 	want := 3
 	value, err := dll.Get(2)
@@ -232,7 +233,7 @@ func TestDllGetNearEnd(t *testing.T) {
 }
 
 func TestDllSetOutOfBounds(t *testing.T) {
-	dll := New[int]()
+	dll := doubly.New[int]()
 	dll.Unshift(1).Unshift(2).Unshift(3)
 	wanthead := 3
 	wantmid := 2
@@ -250,7 +251,7 @@ func TestDllSetOutOfBounds(t *testing.T) {
 }
 
 func TestDllSet(t *testing.T) {
-	dll := New[int]()
+	dll := doubly.New[int]()
 	dll.Unshift(1).Unshift(2).Unshift(3)
 	wanthead := 3
 	wantmid := 100
@@ -268,7 +269,7 @@ func TestDllSet(t *testing.T) {
 }
 
 func TestDllInsertAtBeginning(t *testing.T) {
-	dll := New[int]()
+	dll := doubly.New[int]()
 	wantoldlen := uint(0)
 	wantnewlen := uint(1)
 	want := 10
@@ -286,7 +287,7 @@ func TestDllInsertAtBeginning(t *testing.T) {
 }
 
 func TestDllInsertOutOfBounds(t *testing.T) {
-	dll := New[int]()
+	dll := doubly.New[int]()
 	wantoldlen := uint(0)
 	wantnewlen := uint(0)
 	want := 0
@@ -304,7 +305,7 @@ func TestDllInsertOutOfBounds(t *testing.T) {
 }
 
 func TestDllInsert(t *testing.T) {
-	dll := New[int]()
+	dll := doubly.New[int]()
 	dll.Push(1).Push(3).Push(4)
 	wantoldlen := uint(3)
 	wantnewlen := uint(4)
@@ -324,7 +325,7 @@ func TestDllInsert(t *testing.T) {
 }
 
 func TestDllRemoveEmpty(t *testing.T) {
-	dll := New[int]()
+	dll := doubly.New[int]()
 	want := 0
 	value, errv := dll.Remove(1)
 	assert.Equal(t, want, value)
@@ -332,7 +333,7 @@ func TestDllRemoveEmpty(t *testing.T) {
 }
 
 func TestDllRemoveFromTheBeginning(t *testing.T) {
-	dll := New[int]()
+	dll := doubly.New[int]()
 	dll.Push(1).Push(2)
 	want := 1
 	value, errv := dll.Remove(0)
@@ -341,7 +342,7 @@ func TestDllRemoveFromTheBeginning(t *testing.T) {
 }
 
 func TestDllRemoveFromTheEnd(t *testing.T) {
-	dll := New[int]()
+	dll := doubly.New[int]()
 	dll.Push(1).Push(2)
 	want := 2
 	value, errv := dll.Remove(1)
@@ -350,7 +351,7 @@ func TestDllRemoveFromTheEnd(t *testing.T) {
 }
 
 func TestDllRemoveFromTheMid(t *testing.T) {
-	dll := New[int]()
+	dll := doubly.New[int]()
 	dll.Push(1).Push(2).Push(3)
 	want := 2
 	value, errv := dll.Remove(1)
@@ -359,7 +360,7 @@ func TestDllRemoveFromTheMid(t *testing.T) {
 }
 
 func TestDllReverse(t *testing.T) {
-	dll := New[int]()
+	dll := doubly.New[int]()
 	dll.Push(1).Push(2).Push(3)
 	wanthead := 3
 	wanttail := 1
@@ -377,7 +378,7 @@ func TestDllReverse(t *testing.T) {
 }
 
 func TestDllForEach(t *testing.T) {
-	dll := New[int]()
+	dll := doubly.New[int]()
 	dll.Push(1).Push(2).Push(3)
 	want := []int{1, 2, 3}
 	dll.ForEach(func(number *int) {

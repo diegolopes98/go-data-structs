@@ -1,20 +1,21 @@
-package sll
+package sll_test
 
 import (
 	"testing"
 
+	singly "github.com/diegolopes98/go-data-structs/lists/sll"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestNewSllLength(t *testing.T) {
-	sll := New[int]()
+	sll := singly.New[int]()
 	wantlen := uint(0)
 	length := sll.Length()
 	assert.Equal(t, wantlen, length)
 }
 
 func TestNewSllHead(t *testing.T) {
-	sll := New[int]()
+	sll := singly.New[int]()
 	want := 0
 	head, err := sll.Head()
 	assert.Equal(t, head, want)
@@ -22,7 +23,7 @@ func TestNewSllHead(t *testing.T) {
 }
 
 func TestNewSllTail(t *testing.T) {
-	sll := New[int]()
+	sll := singly.New[int]()
 	want := 0
 	tail, err := sll.Tail()
 	assert.Equal(t, tail, want)
@@ -30,7 +31,7 @@ func TestNewSllTail(t *testing.T) {
 }
 
 func TestNewSllPush(t *testing.T) {
-	sll := New[int]()
+	sll := singly.New[int]()
 	sll.Push(1)
 	want := 1
 	head, errhead := sll.Head()
@@ -42,14 +43,14 @@ func TestNewSllPush(t *testing.T) {
 }
 
 func TestSllLength(t *testing.T) {
-	sll := New[int]()
+	sll := singly.New[int]()
 	sll.Push(1)
 	want := uint(1)
 	assert.Equal(t, want, sll.Length())
 }
 
 func TestSllHead(t *testing.T) {
-	sll := New[int]()
+	sll := singly.New[int]()
 	sll.Push(1)
 	want := 1
 	head, err := sll.Head()
@@ -58,7 +59,7 @@ func TestSllHead(t *testing.T) {
 }
 
 func TestSllTail(t *testing.T) {
-	sll := New[int]()
+	sll := singly.New[int]()
 	sll.Push(1)
 	want := 1
 	tail, err := sll.Tail()
@@ -67,7 +68,7 @@ func TestSllTail(t *testing.T) {
 }
 
 func TestSllPush(t *testing.T) {
-	sll := New[int]()
+	sll := singly.New[int]()
 	sll.Push(1).Push(2).Push(3)
 	wanthead := 1
 	wanttail := 3
@@ -82,7 +83,7 @@ func TestSllPush(t *testing.T) {
 }
 
 func TestSllPopEmpty(t *testing.T) {
-	sll := New[int]()
+	sll := singly.New[int]()
 	want := 0
 	head, errh := sll.Head()
 	tail, errt := sll.Tail()
@@ -96,7 +97,7 @@ func TestSllPopEmpty(t *testing.T) {
 }
 
 func TestSllPopOneElem(t *testing.T) {
-	sll := New[int]()
+	sll := singly.New[int]()
 	sll.Push(1)
 	want := 1
 	head, errh := sll.Head()
@@ -111,7 +112,7 @@ func TestSllPopOneElem(t *testing.T) {
 }
 
 func TestSllPop(t *testing.T) {
-	sll := New[int]()
+	sll := singly.New[int]()
 	sll.Push(1).Push(2)
 	wanthead := 1
 	wanttail := 2
@@ -130,7 +131,7 @@ func TestSllPop(t *testing.T) {
 }
 
 func TestSllShiftEmpty(t *testing.T) {
-	sll := New[int]()
+	sll := singly.New[int]()
 	want := 0
 	head, errh := sll.Head()
 	tail, errt := sll.Tail()
@@ -144,7 +145,7 @@ func TestSllShiftEmpty(t *testing.T) {
 }
 
 func TestSllShiftOneElem(t *testing.T) {
-	sll := New[int]()
+	sll := singly.New[int]()
 	sll.Push(1)
 	want := 1
 	head, errh := sll.Head()
@@ -159,7 +160,7 @@ func TestSllShiftOneElem(t *testing.T) {
 }
 
 func TestSllShift(t *testing.T) {
-	sll := New[int]()
+	sll := singly.New[int]()
 	sll.Push(1).Push(2)
 	wanthead := 1
 	wanttail := 2
@@ -178,7 +179,7 @@ func TestSllShift(t *testing.T) {
 }
 
 func TestSllUnshiftEmpty(t *testing.T) {
-	sll := New[int]()
+	sll := singly.New[int]()
 	sll.Unshift(1)
 	want := 1
 	head, errhead := sll.Head()
@@ -190,7 +191,7 @@ func TestSllUnshiftEmpty(t *testing.T) {
 }
 
 func TestSllUnshift(t *testing.T) {
-	sll := New[int]()
+	sll := singly.New[int]()
 	sll.Unshift(1).Unshift(2).Unshift(3)
 	wanthead := 3
 	wanttail := 1
@@ -205,7 +206,7 @@ func TestSllUnshift(t *testing.T) {
 }
 
 func TestSllGetOutOfBounds(t *testing.T) {
-	sll := New[int]()
+	sll := singly.New[int]()
 	sll.Unshift(1).Unshift(2).Unshift(3)
 	want := 0
 	value, err := sll.Get(100)
@@ -214,7 +215,7 @@ func TestSllGetOutOfBounds(t *testing.T) {
 }
 
 func TestSllGet(t *testing.T) {
-	sll := New[int]()
+	sll := singly.New[int]()
 	sll.Unshift(1).Unshift(2).Unshift(3)
 	want := 1
 	value, err := sll.Get(2)
@@ -223,7 +224,7 @@ func TestSllGet(t *testing.T) {
 }
 
 func TestSllSetOutOfBounds(t *testing.T) {
-	sll := New[int]()
+	sll := singly.New[int]()
 	sll.Unshift(1).Unshift(2).Unshift(3)
 	wanthead := 3
 	wantmid := 2
@@ -241,7 +242,7 @@ func TestSllSetOutOfBounds(t *testing.T) {
 }
 
 func TestSllSet(t *testing.T) {
-	sll := New[int]()
+	sll := singly.New[int]()
 	sll.Unshift(1).Unshift(2).Unshift(3)
 	wanthead := 3
 	wantmid := 100
@@ -259,7 +260,7 @@ func TestSllSet(t *testing.T) {
 }
 
 func TestSllInsertAtBeginning(t *testing.T) {
-	sll := New[int]()
+	sll := singly.New[int]()
 	wantoldlen := uint(0)
 	wantnewlen := uint(1)
 	want := 10
@@ -277,7 +278,7 @@ func TestSllInsertAtBeginning(t *testing.T) {
 }
 
 func TestSllInsertOutOfBounds(t *testing.T) {
-	sll := New[int]()
+	sll := singly.New[int]()
 	wantoldlen := uint(0)
 	wantnewlen := uint(0)
 	want := 0
@@ -295,7 +296,7 @@ func TestSllInsertOutOfBounds(t *testing.T) {
 }
 
 func TestSllInsert(t *testing.T) {
-	sll := New[int]()
+	sll := singly.New[int]()
 	sll.Push(1).Push(3).Push(4)
 	wantoldlen := uint(3)
 	wantnewlen := uint(4)
@@ -315,7 +316,7 @@ func TestSllInsert(t *testing.T) {
 }
 
 func TestSllRemoveEmpty(t *testing.T) {
-	sll := New[int]()
+	sll := singly.New[int]()
 	want := 0
 	value, errv := sll.Remove(1)
 	assert.Equal(t, want, value)
@@ -323,7 +324,7 @@ func TestSllRemoveEmpty(t *testing.T) {
 }
 
 func TestSllRemoveFromTheBeginning(t *testing.T) {
-	sll := New[int]()
+	sll := singly.New[int]()
 	sll.Push(1).Push(2)
 	want := 1
 	value, errv := sll.Remove(0)
@@ -332,7 +333,7 @@ func TestSllRemoveFromTheBeginning(t *testing.T) {
 }
 
 func TestSllRemoveFromTheEnd(t *testing.T) {
-	sll := New[int]()
+	sll := singly.New[int]()
 	sll.Push(1).Push(2)
 	want := 2
 	value, errv := sll.Remove(1)
@@ -341,7 +342,7 @@ func TestSllRemoveFromTheEnd(t *testing.T) {
 }
 
 func TestSllRemoveFromTheMid(t *testing.T) {
-	sll := New[int]()
+	sll := singly.New[int]()
 	sll.Push(1).Push(2).Push(3)
 	want := 2
 	value, errv := sll.Remove(1)
@@ -350,7 +351,7 @@ func TestSllRemoveFromTheMid(t *testing.T) {
 }
 
 func TestSllReverse(t *testing.T) {
-	sll := New[int]()
+	sll := singly.New[int]()
 	sll.Push(1).Push(2).Push(3)
 	wanthead := 3
 	wanttail := 1
@@ -368,7 +369,7 @@ func TestSllReverse(t *testing.T) {
 }
 
 func TestSllForEach(t *testing.T) {
-	sll := New[int]()
+	sll := singly.New[int]()
 	sll.Push(1).Push(2).Push(3)
 	want := []int{1, 2, 3}
 	sll.ForEach(func(number *int) {
