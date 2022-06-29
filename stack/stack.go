@@ -6,6 +6,15 @@ const (
 	emptyerr = "empty stack"
 )
 
+type node[T any] struct {
+	value T
+	next  *node[T]
+}
+
+func newnode[T any](value T) *node[T] {
+	return &node[T]{value, nil}
+}
+
 type Stack[T any] interface {
 	Size() uint
 	Push(value T) Stack[T]
@@ -13,8 +22,8 @@ type Stack[T any] interface {
 }
 
 type stack[T any] struct {
-	first node[T]
-	last  node[T]
+	first *node[T]
+	last  *node[T]
 	size  uint
 }
 
@@ -33,7 +42,7 @@ func (s *stack[T]) Push(value T) Stack[T] {
 		s.last = node
 	} else {
 		oldfirst := s.first
-		node.setnext(oldfirst)
+		node.next = oldfirst
 		s.first = node
 	}
 	s.size++
@@ -45,10 +54,10 @@ func (s *stack[T]) Pop() (T, error) {
 		return *new(T), errors.New(emptyerr)
 	}
 	popped := s.first
-	s.first = popped.getnext()
+	s.first = popped.next
 	s.size--
 	if s.size == 0 {
 		s.last = nil
 	}
-	return popped.getvalue(), nil
+	return popped.value, nil
 }
