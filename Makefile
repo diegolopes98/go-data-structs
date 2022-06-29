@@ -12,4 +12,4 @@ cover:
 clean:
 	rm -rf coverage.out
 
-.PHONY: test cover
+.PHONY: test cover clean
