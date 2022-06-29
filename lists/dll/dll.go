@@ -84,17 +84,16 @@ func (l *list[T]) Shift() (T, error) {
 	if l.len == 0 {
 		return *new(T), errors.New(emptyerr)
 	}
-	shifted := l.head
-	if l.len > 1 {
-		l.head = shifted.prev
+	node := l.head
+	l.head = node.next
+	if l.head != nil {
 		l.head.prev = nil
-		shifted.next = nil
-	} else {
-		l.head = nil
-		l.tail = nil
 	}
 	l.len--
-	return shifted.value, nil
+	if l.len == 0 {
+		l.tail = nil
+	}
+	return node.value, nil
 }
 
 func (l *list[T]) Unshift(value T) lists.List[T] {
@@ -112,10 +111,10 @@ func (l *list[T]) Unshift(value T) lists.List[T] {
 }
 
 func (l *list[T]) get(index uint) *dnode[T] {
-	if index > l.len-1 {
+	if l.len == 0 || index > l.len-1 {
 		return nil
 	}
-	headstart := index <= l.len/2
+	headstart := index < l.len/2
 	var node *dnode[T]
 	if headstart {
 		node = l.head
@@ -166,9 +165,9 @@ func (l *list[T]) Insert(index uint, value T) lists.List[T] {
 
 func (l *list[T]) Remove(index uint) (T, error) {
 	if index == 0 {
-		l.Shift()
+		return l.Shift()
 	} else if index == l.len-1 {
-		l.Pop()
+		return l.Pop()
 	} else {
 		prev := l.get(index - 1)
 		if prev != nil {
@@ -204,18 +203,4 @@ func (l *list[T]) ForEach(f func(*T)) {
 		f(&curr.value)
 		curr = curr.next
 	}
-}
-
-func ForEach[T any](l lists.List[T], f func(*T)) {
-	lists.ForEach(l, f)
-}
-
-func Filter[T any](l lists.List[T], f func(T) bool) lists.List[T] {
-	new := New[T]
-	return lists.Filter(l, new, f)
-}
-
-func Map[T, N any](l lists.List[T], f func(T) N) lists.List[N] {
-	new := New[N]
-	return lists.Map(l, new, f)
 }
