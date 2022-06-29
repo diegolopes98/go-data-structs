@@ -8,6 +8,15 @@ const (
 	emptyerr = "empty queue"
 )
 
+type node[T any] struct {
+	value T
+	next  *node[T]
+}
+
+func newnode[T any](value T) *node[T] {
+	return &node[T]{value, nil}
+}
+
 type Queue[T any] interface {
 	Size() uint
 	Enqueue(value T) Queue[T]
@@ -15,8 +24,8 @@ type Queue[T any] interface {
 }
 
 type queue[T any] struct {
-	first node[T]
-	last  node[T]
+	first *node[T]
+	last  *node[T]
 	size  uint
 }
 
@@ -34,7 +43,7 @@ func (q *queue[T]) Enqueue(value T) Queue[T] {
 		q.first = node
 		q.last = node
 	} else {
-		q.last.setnext(node)
+		q.last.next = node
 		q.last = node
 	}
 	q.size++
@@ -46,10 +55,10 @@ func (q *queue[T]) Dequeue() (T, error) {
 		return *new(T), errors.New(emptyerr)
 	}
 	dequeued := q.first
-	q.first = q.first.getnext()
+	q.first = q.first.next
 	q.size--
 	if q.size == 0 {
 		q.last = nil
 	}
-	return dequeued.getvalue(), nil
+	return dequeued.value, nil
 }
