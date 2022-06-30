@@ -18,6 +18,7 @@ func NewNode[T constraints.Ordered](value T) *Node[T] {
 type BST[T constraints.Ordered] interface {
 	Root() *Node[T]
 	Insert(value T) BST[T]
+	Find(value T) *Node[T]
 }
 
 func New[T constraints.Ordered]() BST[T] {
@@ -58,4 +59,26 @@ func (t *tree[T]) Insert(value T) BST[T] {
 		insert(t.root, node)
 	}
 	return t
+}
+
+func find[T constraints.Ordered](root *Node[T], value T) *Node[T] {
+	if root.Value == value {
+		return root
+	} else if value > root.Value {
+		if root.Right != nil {
+			return find(root.Right, value)
+		}
+	} else if value < root.Value {
+		if root.Left != nil {
+			return find(root.Left, value)
+		}
+	}
+	return nil
+}
+
+func (t *tree[T]) Find(value T) *Node[T] {
+	if t.root == nil {
+		return nil
+	}
+	return find(t.root, value)
 }
