@@ -60,3 +60,61 @@ func TestBSTInsertToFreq(t *testing.T) {
 	assert.Equal(t, want, bst.Root().Value)
 	assert.Equal(t, wantfreq, bst.Root().Frequency)
 }
+
+func TestBSTEmptyFind(t *testing.T) {
+	bst := bstree.New[int]()
+	node := bst.Find(10)
+	assert.Nil(t, node)
+}
+
+func TestBSTFindRoot(t *testing.T) {
+	bst := bstree.New[int]()
+	bst.Insert(10)
+	want := 10
+	node := bst.Find(10)
+	assert.NotNil(t, node)
+	assert.Equal(t, want, node.Value)
+}
+
+func TestBSTFindRight(t *testing.T) {
+	bst := bstree.New[int]()
+	bst.Insert(1).Insert(10)
+	want := 10
+	node := bst.Find(10)
+	assert.NotNil(t, node)
+	assert.Equal(t, want, node.Value)
+}
+
+func TestBSTFindRightDeeper(t *testing.T) {
+	bst := bstree.New[int]()
+	bst.Insert(1).Insert(10).Insert(100)
+	want := 100
+	node := bst.Find(100)
+	assert.NotNil(t, node)
+	assert.Equal(t, want, node.Value)
+}
+
+func TestBSTFindLeft(t *testing.T) {
+	bst := bstree.New[int]()
+	bst.Insert(10).Insert(1)
+	want := 1
+	node := bst.Find(1)
+	assert.NotNil(t, node)
+	assert.Equal(t, want, node.Value)
+}
+
+func TestBSTFindLeftDeeper(t *testing.T) {
+	bst := bstree.New[int]()
+	bst.Insert(100).Insert(10).Insert(1)
+	want := 1
+	node := bst.Find(1)
+	assert.NotNil(t, node)
+	assert.Equal(t, want, node.Value)
+}
+
+func TestBSTFindNone(t *testing.T) {
+	bst := bstree.New[int]()
+	bst.Insert(100).Insert(10).Insert(1)
+	node := bst.Find(1000)
+	assert.Nil(t, node)
+}
